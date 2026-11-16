@@ -129,7 +129,7 @@ export function Footer({ onOpenAdmin }: FooterProps) {
                 <button
                   onClick={onOpenAdmin}
                   className="inline-flex items-center gap-1.5 text-white/50 hover:text-[#4B8CFF] transition-colors cursor-pointer"
-                  title="A1 Admin Portal (Password: a12026)"
+                  title="A1 Admin Portal"
                 >
                   <Lock className="w-3 h-3" />
                   <span>Admin Portal</span>

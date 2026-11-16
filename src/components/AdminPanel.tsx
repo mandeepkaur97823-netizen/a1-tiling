@@ -553,7 +553,7 @@ export function AdminPanel({
                     type={showPassword ? "text" : "password"}
                     value={passwordInput}
                     onChange={(e) => setPasswordInput(e.target.value)}
-                    placeholder="Enter admin password (a12026)"
+                    placeholder="Enter admin password"
                     autoFocus
                     className="w-full px-4 py-3 bg-black/60 border border-white/20 text-white text-sm focus:border-[#4B8CFF] focus:outline-none transition-colors pr-10"
                   />
@@ -585,8 +585,9 @@ export function AdminPanel({
             </form>
 
             <div className="mt-8 pt-6 border-t border-white/10 text-center">
-              <p className="text-[11px] font-mono text-[#B8B8B8]/70">
-                Default Security Password: <code className="text-[#4B8CFF] font-semibold">a12026</code>
+              <p className="text-[11px] font-mono text-[#B8B8B8]/60 flex items-center justify-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#4B8CFF]" />
+                <span>Authorized Management Portal</span>
               </p>
             </div>
           </div>
@@ -735,10 +736,10 @@ export function AdminPanel({
                 Change Admin Password:
               </span>
               <input
-                type="text"
+                type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="New password (e.g. a12026)"
+                placeholder="Enter new password"
                 className="px-3 py-1.5 bg-black/60 border border-white/20 text-xs text-white focus:outline-none focus:border-[#4B8CFF]"
               />
               <button
