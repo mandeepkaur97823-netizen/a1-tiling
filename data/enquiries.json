@@ -1,0 +1,57 @@
+[
+  {
+    "referenceId": "A1-J117DQ",
+    "submittedAt": "2026-11-16T08:53:58.046Z",
+    "fullName": "mandeep kaur",
+    "phone": "4836186474",
+    "email": "mannu@gmail.com",
+    "location": "Brisbane",
+    "service": "Wall & Floor Tiling",
+    "projectType": "Residential",
+    "description": "gwdg gdhsbcwd yuirhfb",
+    "hasPhoto": false,
+    "status": "quoted"
+  },
+  {
+    "referenceId": "A1-SAMPLE1",
+    "submittedAt": "2026-11-16T04:30:04.192Z",
+    "fullName": "Michael Henderson",
+    "phone": "0412 345 678",
+    "email": "m.henderson@example.com.au",
+    "location": "Brisbane",
+    "service": "Wall & Floor Tiling",
+    "projectType": "Residential",
+    "description": "Renovation of master bathroom and separate ensuite in New Farm. Approx 45sqm wall and floor tiling with 1200x600 porcelain tiles and mitred niche.",
+    "hasPhoto": false,
+    "status": "new",
+    "notes": "Client requested call back after 3pm. Interested in dark slate finish."
+  },
+  {
+    "referenceId": "A1-SAMPLE2",
+    "submittedAt": "2026-11-15T06:30:04.192Z",
+    "fullName": "Sarah & David Jenkins",
+    "phone": "0423 889 900",
+    "email": "sjenkins.design@example.com",
+    "location": "Gold Coast",
+    "service": "Stone Work (Wall & Floor)",
+    "projectType": "Residential",
+    "description": "Architectural dry-stacked sandstone feature wall for outdoor living pavilion and large bluestone floor pavers around alfresco terrace.",
+    "hasPhoto": false,
+    "status": "contacted",
+    "notes": "Initial phone call completed. Site inspection booked for Thursday morning."
+  },
+  {
+    "referenceId": "A1-SAMPLE3",
+    "submittedAt": "2026-11-14T04:30:04.192Z",
+    "fullName": "Liam O'Connor (Coastal Resorts)",
+    "phone": "0431 772 119",
+    "email": "liam@coastalresorts.com.au",
+    "location": "Sunshine Coast",
+    "service": "Pool Tiling",
+    "projectType": "Commercial",
+    "description": "Full waterline mosaic tiling (deep teal glass mosaics) and drop-face limestone pool coping for resort swimming pool in Noosa Heads.",
+    "hasPhoto": false,
+    "status": "quoted",
+    "notes": "Formal quote sent ($18,400 inc GST). Awaiting builder approval."
+  }
+]
