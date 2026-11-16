@@ -81,7 +81,7 @@ export function HeroSection() {
               href="#projects"
               className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 text-xs sm:text-sm font-semibold tracking-[0.14em] uppercase border border-white/35 bg-[#050505]/75 text-white hover:border-white hover:bg-white/10 transition-colors whitespace-nowrap active:scale-[0.99] text-center"
             >
-              <span>EXPLORE OUR WORK</span>
+              <span>EXPLORE PROJECTS</span>
             </a>
           </motion.div>
 
