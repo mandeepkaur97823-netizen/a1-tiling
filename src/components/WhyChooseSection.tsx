@@ -29,13 +29,13 @@ const pillars = [
 
 export function WhyChooseSection() {
   return (
-    <section className="bg-[#050505] text-white py-20 lg:py-28 border-t border-white/10">
-      <div className="max-w-[1280px] mx-auto px-6 lg:px-10">
-        <div className="max-w-3xl mb-14">
-          <p className="font-mono text-xs tracking-[0.2em] text-[#4B8CFF] uppercase mb-3">
+    <section className="bg-[#050505] text-white py-14 sm:py-20 lg:py-28 border-t border-white/10">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="max-w-3xl mb-8 sm:mb-14">
+          <p className="font-mono text-[11px] sm:text-xs tracking-[0.2em] text-[#4B8CFF] uppercase mb-1.5 sm:mb-3">
             Why Choose A1 Tiling
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-balance">
+          <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-tight text-balance">
             EXPERIENCE YOU CAN SEE IN EVERY DETAIL.
           </h2>
         </div>
@@ -46,18 +46,18 @@ export function WhyChooseSection() {
             return (
               <div
                 key={pillar.title}
-                className="bg-[#0b0c0e] p-8 flex flex-col justify-between gap-8"
+                className="bg-[#0b0c0e] p-5 sm:p-6 lg:p-8 flex flex-col justify-between gap-4 sm:gap-8"
               >
                 <Icon
-                  className="w-7 h-7 text-[#4B8CFF]"
+                  className="w-6 h-6 sm:w-7 sm:h-7 text-[#4B8CFF]"
                   strokeWidth={1.5}
                   aria-hidden="true"
                 />
                 <div>
-                  <h3 className="font-display text-lg font-semibold tracking-wide text-white mb-3">
+                  <h3 className="font-display text-sm sm:text-base lg:text-lg font-semibold tracking-wide text-white mb-1.5 sm:mb-3">
                     {pillar.title}
                   </h3>
-                  <p className="text-sm text-[#B8B8B8] leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#B8B8B8] leading-relaxed">
                     {pillar.description}
                   </p>
                 </div>

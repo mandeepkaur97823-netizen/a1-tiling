@@ -183,7 +183,7 @@ export function QuoteSection({
   return (
     <section
       id="quote"
-      className="relative bg-[#050505] text-white py-20 lg:py-28 border-t border-white/10 overflow-hidden"
+      className="relative bg-[#050505] text-white py-14 sm:py-20 lg:py-28 border-t border-white/10 overflow-hidden"
     >
       {/* Subtle architectural texture backdrop */}
       <div
@@ -198,30 +198,30 @@ export function QuoteSection({
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-[#050505]/70 to-[#050505]" />
       </div>
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-start">
           {/* Left Conversion Copy */}
           <div className="lg:col-span-5">
-            <p className="font-mono text-xs tracking-[0.2em] text-[#4B8CFF] uppercase mb-3">
+            <p className="font-mono text-[11px] sm:text-xs tracking-[0.2em] text-[#4B8CFF] uppercase mb-1.5 sm:mb-3">
               Free Quote Request
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-balance mb-6">
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-tight text-balance mb-3 sm:mb-6">
               LET’S BRING YOUR NEXT PROJECT TO LIFE.
             </h2>
-            <p className="text-base text-[#B8B8B8] leading-relaxed mb-8">
+            <p className="text-xs sm:text-base text-[#B8B8B8] leading-relaxed mb-6 sm:mb-8">
               Planning a residential or commercial tiling project? Get in touch
               with A1 Tiling to discuss your requirements and request a free
               quote.
             </p>
 
-            <div className="border-t border-white/15 pt-6 space-y-4">
+            <div className="border-t border-white/15 pt-5 sm:pt-6 space-y-3 sm:space-y-4">
               <p className="text-xs font-mono tracking-[0.15em] text-[#B8B8B8] uppercase">
                 Direct Enquiries
               </p>
-              <div className="flex flex-col sm:flex-row lg:flex-col gap-3">
+              <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 sm:gap-3">
                 <a
                   href={`tel:${business.phoneInternational}`}
-                  className="inline-flex items-center gap-3 px-5 py-3.5 bg-[#151515] border border-white/15 hover:border-[#4B8CFF] transition-colors text-sm font-medium active:scale-98"
+                  className="inline-flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-3.5 bg-[#151515] border border-white/15 hover:border-[#4B8CFF] transition-colors text-xs sm:text-sm font-medium active:scale-98"
                 >
                   <Phone className="w-4 h-4 text-[#4B8CFF] shrink-0" />
                   <span>Call {business.phoneDisplay}</span>
@@ -232,14 +232,14 @@ export function QuoteSection({
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-5 py-3.5 bg-emerald-950/20 border border-emerald-500/30 hover:border-emerald-400 text-emerald-300 transition-colors text-sm font-medium active:scale-98"
+                  className="inline-flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-3.5 bg-emerald-950/20 border border-emerald-500/30 hover:border-emerald-400 text-emerald-300 transition-colors text-xs sm:text-sm font-medium active:scale-98"
                 >
                   <MessageSquare className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>Chat on WhatsApp</span>
                 </a>
                 <a
                   href={`mailto:${business.email}`}
-                  className="inline-flex items-center gap-3 px-5 py-3.5 bg-[#151515] border border-white/15 hover:border-[#4B8CFF] transition-colors text-sm font-medium active:scale-98"
+                  className="inline-flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-3.5 bg-[#151515] border border-white/15 hover:border-[#4B8CFF] transition-colors text-xs sm:text-sm font-medium active:scale-98"
                 >
                   <Mail className="w-4 h-4 text-[#4B8CFF] shrink-0" />
                   <span className="truncate">{business.email}</span>
@@ -249,7 +249,7 @@ export function QuoteSection({
           </div>
 
           {/* Right Functional Enquiry Form */}
-          <div className="lg:col-span-7 bg-[#0d0e10]/95 border border-white/15 p-6 sm:p-10">
+          <div className="lg:col-span-7 bg-[#0d0e10]/95 border border-white/15 p-5 sm:p-8 lg:p-10">
             {submittedRef ? (
               <div className="py-6 space-y-6">
                 <div className="flex items-start gap-3">

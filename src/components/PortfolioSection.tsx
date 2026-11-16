@@ -87,20 +87,20 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
   return (
     <section
       id="projects"
-      className="bg-[#0b0c0e] text-white py-20 lg:py-28 border-t border-white/10"
+      className="bg-[#0b0c0e] text-white py-14 sm:py-20 lg:py-28 border-t border-white/10"
     >
-      <div className="max-w-[1280px] mx-auto px-6 lg:px-10">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-8 border-b border-white/10">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 sm:gap-6 mb-6 sm:mb-10 pb-5 sm:pb-8 border-b border-white/10">
           <div>
-            <p className="font-mono text-xs tracking-[0.2em] text-[#4B8CFF] uppercase mb-3">
+            <p className="font-mono text-[11px] sm:text-xs tracking-[0.2em] text-[#4B8CFF] uppercase mb-1.5 sm:mb-3">
               Portfolio &amp; Project Showcase
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-balance">
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-tight text-balance">
               CRAFTED SPACES. LASTING IMPRESSIONS.
             </h2>
           </div>
-          <p className="text-base text-[#B8B8B8] max-w-md leading-relaxed">
+          <p className="text-xs sm:text-base text-[#B8B8B8] max-w-md leading-relaxed">
             Real Queensland projects, custom natural stone masonry, and
             architectural large-format tiling with precision at every joint.
           </p>
@@ -110,7 +110,7 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
         <div
           role="tablist"
           aria-label="Filter projects by tiling category"
-          className="flex flex-nowrap overflow-x-auto no-scrollbar scroll-smooth gap-2 pb-2 sm:pb-0 sm:flex-wrap mb-8 sm:mb-10 -mx-6 px-6 sm:mx-0 sm:px-0"
+          className="flex flex-nowrap overflow-x-auto no-scrollbar scroll-smooth gap-1.5 sm:gap-2 pb-2 sm:pb-0 sm:flex-wrap mb-6 sm:mb-10 -mx-4 px-4 sm:mx-0 sm:px-0"
         >
           {categories.map((category) => {
             const active = category === activeCategory;
@@ -121,7 +121,7 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
                 role="tab"
                 aria-selected={active}
                 onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2.5 text-xs font-medium tracking-wide transition-colors whitespace-nowrap shrink-0 border cursor-pointer active:scale-95 ${
+                className={`px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-medium tracking-wide transition-colors whitespace-nowrap shrink-0 border cursor-pointer active:scale-95 ${
                   active
                     ? "bg-white text-[#050505] border-white font-semibold shadow-md"
                     : "bg-[#151619] text-[#B8B8B8] border-white/10 hover:border-white/30 hover:text-white"
@@ -134,7 +134,7 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
         </div>
 
         {/* Clean Project Grid (Single Presentation - Zero Duplication!) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-8">
           {filteredItems.map((item) => (
             <article
               key={item.id}
@@ -165,7 +165,7 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
                 {/* Location Chip */}
                 {item.location && (
                   <div className="absolute bottom-3 left-3 z-10 pointer-events-none">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/80 backdrop-blur-sm border border-white/15 text-[11px] text-white/90 font-mono">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/80 backdrop-blur-sm border border-white/15 text-[10px] sm:text-[11px] text-white/90 font-mono">
                       <MapPin className="w-3 h-3 text-[#4B8CFF]" />
                       {item.location}
                     </span>
@@ -174,28 +174,28 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
               </button>
 
               {/* Card Body */}
-              <div className="p-6 flex-1 flex flex-col justify-between">
+              <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between text-xs text-[#B8B8B8] mb-2.5">
-                    <span className="font-mono text-[#4B8CFF] uppercase tracking-wider text-[11px] font-medium">
+                  <div className="flex items-center justify-between text-xs text-[#B8B8B8] mb-2">
+                    <span className="font-mono text-[#4B8CFF] uppercase tracking-wider text-[10px] sm:text-[11px] font-medium">
                       {item.category}
                     </span>
-                    <span className="text-[11px] text-[#B8B8B8]/70">
+                    <span className="text-[10px] sm:text-[11px] text-[#B8B8B8]/70">
                       Queensland
                     </span>
                   </div>
 
-                  <h3 className="font-display text-lg font-semibold text-white mb-2 group-hover:text-[#4B8CFF] transition-colors leading-snug">
+                  <h3 className="font-display text-base sm:text-lg font-semibold text-white mb-1.5 sm:mb-2 group-hover:text-[#4B8CFF] transition-colors leading-snug">
                     {item.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-[#B8B8B8] leading-relaxed line-clamp-3 mb-4">
+                  <p className="text-xs sm:text-sm text-[#B8B8B8] leading-relaxed line-clamp-2 sm:line-clamp-3 mb-3 sm:mb-4">
                     {item.description}
                   </p>
 
                   {/* Micro Specs Tags */}
                   {item.material && (
-                    <div className="pt-3 border-t border-white/10 text-[11px] text-[#B8B8B8] flex items-start gap-1.5 line-clamp-1">
+                    <div className="pt-2.5 sm:pt-3 border-t border-white/10 text-[10px] sm:text-[11px] text-[#B8B8B8] flex items-start gap-1.5 line-clamp-1">
                       <span className="text-[#4B8CFF] font-mono">Tile:</span>
                       <span className="text-white/80 truncate">
                         {item.material}
@@ -204,11 +204,11 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
                   )}
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
+                <div className="pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-white/10 flex items-center justify-between">
                   <button
                     type="button"
                     onClick={() => setLightboxItem(item)}
-                    className="text-xs text-white/80 hover:text-white font-medium inline-flex items-center gap-1.5 transition-colors"
+                    className="text-[11px] sm:text-xs text-white/80 hover:text-white font-medium inline-flex items-center gap-1 transition-colors"
                   >
                     View Details
                     <ChevronRight className="w-3.5 h-3.5 text-[#4B8CFF]" />
@@ -217,7 +217,7 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
                   <button
                     type="button"
                     onClick={() => scrollToQuote(item.category)}
-                    className="text-xs text-[#4B8CFF] hover:underline font-mono inline-flex items-center gap-1"
+                    className="text-[11px] sm:text-xs text-[#4B8CFF] hover:underline font-mono inline-flex items-center gap-1"
                   >
                     Request Quote &rarr;
                   </button>

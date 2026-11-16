@@ -29,10 +29,10 @@ export function IntroSection() {
   return (
     <section
       id="about"
-      className="bg-[#F3F2EF] text-[#050505] py-20 lg:py-28 border-t border-black/10"
+      className="bg-[#F3F2EF] text-[#050505] py-14 sm:py-20 lg:py-28 border-t border-black/10"
     >
-      <div className="max-w-[1280px] mx-auto px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-stretch">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 items-stretch">
           {/* Left Copy Column */}
           <motion.div
             initial={prefersReduced ? false : { opacity: 0, y: 20 }}
@@ -42,13 +42,13 @@ export function IntroSection() {
             className="lg:col-span-6 flex flex-col justify-between"
           >
             <div>
-              <p className="font-mono text-xs tracking-[0.2em] text-[#252525]/70 uppercase mb-4">
+              <p className="font-mono text-[11px] sm:text-xs tracking-[0.2em] text-[#252525]/70 uppercase mb-2 sm:mb-4">
                 About A1 Tiling Pty Ltd
               </p>
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#050505] text-balance leading-[1.08] mb-6">
+              <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-tight text-[#050505] text-balance leading-[1.12] sm:leading-[1.08] mb-3 sm:mb-6">
                 TILING THAT TRANSFORMS SPACES.
               </h2>
-              <p className="text-base sm:text-lg text-[#252525] leading-relaxed mb-10 max-w-xl">
+              <p className="text-sm sm:text-base lg:text-lg text-[#252525] leading-relaxed mb-6 sm:mb-10 max-w-xl">
                 At A1 Tiling Pty Ltd, we specialise in all aspects of tiling,
                 bringing experience, attention to detail and high-quality
                 workmanship to residential and commercial projects.
@@ -59,16 +59,16 @@ export function IntroSection() {
               {keyValues.map((val) => (
                 <div
                   key={val.index}
-                  className="py-5 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-4 items-baseline"
+                  className="py-4 sm:py-5 grid grid-cols-1 sm:grid-cols-12 gap-1.5 sm:gap-4 items-baseline"
                 >
                   <span className="sm:col-span-2 font-mono text-xs text-[#4B8CFF] font-medium tabular-nums">
                     {val.index}
                   </span>
                   <div className="sm:col-span-10">
-                    <h3 className="font-display text-lg font-semibold text-[#050505] mb-1">
+                    <h3 className="font-display text-base sm:text-lg font-semibold text-[#050505] mb-1">
                       {val.title}
                     </h3>
-                    <p className="text-sm text-[#252525]/80 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#252525]/80 leading-relaxed">
                       {val.detail}
                     </p>
                   </div>

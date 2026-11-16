@@ -17,7 +17,16 @@
 
   body {
     overflow-x: clip;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      padding-bottom: 0px;
+    }
   }
 
   h1,
