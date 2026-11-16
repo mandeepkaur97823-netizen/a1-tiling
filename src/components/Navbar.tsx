@@ -45,7 +45,7 @@ export function Navbar() {
           : "bg-gradient-to-b from-[#050505]/80 via-[#050505]/30 to-transparent border-b border-transparent"
       }`}
     >
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 h-18 sm:h-20 flex items-center justify-between gap-4 sm:gap-8">
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-14 h-18 sm:h-20 flex items-center justify-between gap-4">
         {/* Left: Brand Logo */}
         <a
           href="#home"
@@ -56,17 +56,17 @@ export function Navbar() {
           <A1Logo size="md" />
         </a>
 
-        {/* Right Side: Navigation Links & CTA grouped together in Right Corner */}
-        <div className="flex items-center gap-6 xl:gap-8 ml-auto">
+        {/* Right Side: Navigation Links & CTA pinned to the far right corner */}
+        <div className="flex items-center gap-3.5 lg:gap-5 xl:gap-7 ml-auto justify-end">
           <nav
             aria-label="Primary navigation"
-            className="hidden lg:flex items-center gap-6 xl:gap-8"
+            className="hidden lg:flex items-center gap-3 xl:gap-5"
           >
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-white/80 hover:text-white transition-colors whitespace-nowrap shrink-0 relative py-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-px after:bg-[#4B8CFF] hover:after:w-full after:transition-all after:duration-200"
+                className="text-xs xl:text-sm font-medium text-white/85 hover:text-white transition-colors whitespace-nowrap shrink-0 relative py-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-px after:bg-[#4B8CFF] hover:after:w-full after:transition-all after:duration-200"
               >
                 {link.label}
               </a>
@@ -76,7 +76,7 @@ export function Navbar() {
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             <a
               href="#quote"
-              className="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-xs font-semibold tracking-[0.12em] uppercase bg-white text-[#050505] hover:bg-[#4B8CFF] hover:text-white transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4B8CFF]"
+              className="hidden sm:inline-flex items-center justify-center px-4 xl:px-5 py-2.5 text-xs font-semibold tracking-[0.12em] uppercase bg-white text-[#050505] hover:bg-[#4B8CFF] hover:text-white transition-colors whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4B8CFF]"
             >
               GET A FREE QUOTE
             </a>
