@@ -79,11 +79,11 @@ export const business = {
     "Residential Tiling",
     "Commercial Tiling",
   ],
-  logoUrl: "/src/assets/images/a1_logo_cropped.png" as string | null,
+  logoUrl: "/images/a1_logo_cropped.png" as string | null,
   hero3DAsset: null as string | null,
-  heroPosterUrl: "/src/assets/images/hero_luxury_bathroom_1794729089186.jpg",
-  introImageUrl: "/src/assets/images/intro_architectural_tiling_1794729090370.jpg",
-  quoteBackdropUrl: "/src/assets/images/quote_architectural_backdrop_1794729092578.jpg",
+  heroPosterUrl: "/images/hero_luxury_bathroom_1794729089186.jpg",
+  introImageUrl: "/images/intro_architectural_tiling_1794729090370.jpg",
+  quoteBackdropUrl: "/images/quote_architectural_backdrop_1794729092578.jpg",
   projectGallery: [] as PortfolioItem[],
   instagramGallery: [] as InstagramGalleryItem[],
   enquiryEndpoint: "/api/enquiries",
@@ -98,7 +98,7 @@ export const serviceCatalog: ServiceDefinition[] = [
     categoryFilter: "Wall & Floor",
     description:
       "Professional wall and floor tiling for interior and exterior spaces, with a focus on clean finishes and precise presentation.",
-    imageUrl: "/src/assets/images/service_wall_floor_1794729089870.jpg",
+    imageUrl: "/images/service_wall_floor_1794729089870.jpg",
     imageAlt:
       "Large-format matte stone-grey wall and floor porcelain tiling in a contemporary interior",
     highlights: [
@@ -115,7 +115,7 @@ export const serviceCatalog: ServiceDefinition[] = [
     categoryFilter: "Stone",
     description:
       "Specialised natural stone work for both walls and floors. From architectural stacked stone cladding and feature walls to premium honed stone flooring, paving, and stone masonry.",
-    imageUrl: "/src/assets/images/service_stone_wall_floor_1794739377016.jpg",
+    imageUrl: "/images/service_stone_wall_floor_1794739377016.jpg",
     imageAlt:
       "Luxury natural stacked stone wall cladding seamlessly meeting large-format honed stone floor paving in an architectural residence",
     highlights: [
@@ -132,7 +132,7 @@ export const serviceCatalog: ServiceDefinition[] = [
     categoryFilter: "Pool",
     description:
       "Pool tiling for beautifully finished outdoor environments, combining tile detail with the surrounding architecture.",
-    imageUrl: "/src/assets/images/service_pool_tiling_1794729091894.jpg",
+    imageUrl: "/images/service_pool_tiling_1794729091894.jpg",
     imageAlt:
       "Luxury Queensland swimming pool with charcoal mosaic waterline tiles and limestone coping",
     highlights: [
@@ -149,7 +149,7 @@ export const serviceCatalog: ServiceDefinition[] = [
     categoryFilter: "Residential",
     description:
       "Tiling services for residential projects, helping create attractive and functional living spaces.",
-    imageUrl: "/src/assets/images/service_residential_tiling_1794729092401.jpg",
+    imageUrl: "/images/service_residential_tiling_1794729092401.jpg",
     imageAlt:
       "Modern residential bathroom featuring marble-look floor slabs and architectural fixtures",
     highlights: [
@@ -166,7 +166,7 @@ export const serviceCatalog: ServiceDefinition[] = [
     categoryFilter: "Commercial",
     description:
       "Tiling services for commercial projects, with professional presentation and attention to project requirements.",
-    imageUrl: "/src/assets/images/service_commercial_tiling_1794729091876.jpg",
+    imageUrl: "/images/service_commercial_tiling_1794729091876.jpg",
     imageAlt:
       "Contemporary commercial building foyer with expansive dark graphite porcelain floor tiles",
     highlights: [
@@ -188,7 +188,7 @@ export const demonstrationPortfolioItems: PortfolioItem[] = [
     standards: "AS3740 Certified Waterproofing & 1.5mm Precision Grout Lines",
     description:
       "High-end master ensuite featuring a walk-in glass shower with large white wall tiles, black hexagon mosaic shower floor, timber-look floor tiles, and quartz double vanity.",
-    imageUrl: "/src/assets/images/portfolio_master_ensuite.jpg",
+    imageUrl: "/images/portfolio_master_ensuite.jpg",
     imageAlt:
       "Modern master bathroom featuring walk-in glass shower with white tiles, black hexagon shower floor, and timber-grain floor tiles",
     isDemonstration: false,
@@ -204,7 +204,7 @@ export const demonstrationPortfolioItems: PortfolioItem[] = [
     standards: "Continuous Herringbone Geometry & Clean Mitred Corner Wrap",
     description:
       "Contemporary open-plan living pavilion centered on an architectural fireplace pillar clad in intricate grey herringbone mosaic tiles with floor-to-ceiling glass.",
-    imageUrl: "/src/assets/images/portfolio_ocean_terrace.jpg",
+    imageUrl: "/images/portfolio_ocean_terrace.jpg",
     imageAlt:
       "Contemporary open-plan living room with grey herringbone tiled fireplace pillar and timber flooring",
     isDemonstration: false,
@@ -220,7 +220,7 @@ export const demonstrationPortfolioItems: PortfolioItem[] = [
     standards: "Concealed Perimeter Sub-Floor Drainage & Anti-Slip Honed Finish",
     description:
       "Resort-inspired indoor-outdoor bathroom with an organic freestanding stone bathtub, framed by smooth natural river pebbles and large-format floor tiles.",
-    imageUrl: "/src/assets/images/portfolio_stone_tub.jpg",
+    imageUrl: "/images/portfolio_stone_tub.jpg",
     imageAlt:
       "Resort bathroom with organic stone bathtub, river pebble border drainage, and large floor tiles",
     isDemonstration: false,
@@ -236,7 +236,7 @@ export const demonstrationPortfolioItems: PortfolioItem[] = [
     standards: "Seamless Mitred 45° Waterfall Edges & Stain-Resistant Grouting",
     description:
       "Architectural kitchen featuring a Calacatta marble waterfall island bench, full-height glazed tiled splashback, and warm integrated under-cabinet lighting.",
-    imageUrl: "/src/assets/images/portfolio_kitchen_island.jpg",
+    imageUrl: "/images/portfolio_kitchen_island.jpg",
     imageAlt:
       "Architectural kitchen with marble waterfall island bench and tiled splashback",
     isDemonstration: false,
@@ -252,7 +252,7 @@ export const demonstrationPortfolioItems: PortfolioItem[] = [
     standards: "Chemical-Resistant Pool Sealing & Precision Masonry Retaining Walls",
     description:
       "Luxury swimming pool with clear turquoise water, timber sun-decking, and a natural dry-stacked limestone retaining wall creating a secluded resort courtyard.",
-    imageUrl: "/src/assets/images/portfolio_noosa_pool.jpg",
+    imageUrl: "/images/portfolio_noosa_pool.jpg",
     imageAlt:
       "Luxury resort pool with turquoise water, timber decking, and dry-stacked natural limestone stone wall",
     isDemonstration: false,
@@ -268,7 +268,7 @@ export const demonstrationPortfolioItems: PortfolioItem[] = [
     standards: "High Slip-Resistance Commercial Handover & Acoustic Sub-Base",
     description:
       "Contemporary corporate office interior featuring expansive honed floor plates, acoustic ceiling baffles, floor-to-ceiling glass meeting suites, and integrated kitchen.",
-    imageUrl: "/src/assets/images/portfolio_commercial_corridor.jpg",
+    imageUrl: "/images/portfolio_commercial_corridor.jpg",
     imageAlt:
       "Commercial corporate office interior featuring large polished floor plates and glass meeting suites",
     isDemonstration: false,

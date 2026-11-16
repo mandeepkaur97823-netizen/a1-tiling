@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Layers } from "lucide-react";
 
 interface FallbackImageProps {
@@ -14,7 +14,41 @@ export function FallbackImage({
   className = "",
   loading = "lazy",
 }: FallbackImageProps) {
+  const [currentSrc, setCurrentSrc] = useState(src);
+  const [attempt, setAttempt] = useState(0);
   const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setCurrentSrc(src);
+    setAttempt(0);
+    setFailed(false);
+  }, [src]);
+
+  const handleError = () => {
+    if (attempt === 0) {
+      setAttempt(1);
+      if (currentSrc.includes("/src/assets/images/")) {
+        setCurrentSrc(currentSrc.replace("/src/assets/images/", "/images/"));
+        return;
+      }
+      if (currentSrc.startsWith("/images/")) {
+        setCurrentSrc(currentSrc.replace("/images/", "/src/assets/images/"));
+        return;
+      }
+      if (currentSrc.startsWith("/")) {
+        setCurrentSrc(currentSrc.slice(1));
+        return;
+      }
+    } else if (attempt === 1) {
+      setAttempt(2);
+      const filename = currentSrc.split("/").pop();
+      if (filename) {
+        setCurrentSrc(`/assets/images/${filename}`);
+        return;
+      }
+    }
+    setFailed(true);
+  };
 
   if (failed) {
     return (
@@ -31,11 +65,11 @@ export function FallbackImage({
 
   return (
     <img
-      src={src}
+      src={currentSrc}
       alt={alt}
       loading={loading}
       referrerPolicy="no-referrer"
-      onError={() => setFailed(true)}
+      onError={handleError}
       className={className}
     />
   );
