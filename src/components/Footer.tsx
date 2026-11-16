@@ -19,7 +19,7 @@ export function Footer({ onOpenAdmin }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#050505] text-white border-t border-white/15 pb-20 md:pb-10">
+    <footer className="bg-[#050505] text-white border-t border-white/15 pb-28 sm:pb-24 md:pb-12">
       <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-14 border-b border-white/10">
           {/* Brand Column */}

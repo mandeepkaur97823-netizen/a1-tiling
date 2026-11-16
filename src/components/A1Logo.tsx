@@ -19,7 +19,7 @@ export function A1Logo({
 
   if (business.logoUrl) {
     return (
-      <div className={`inline-flex items-center gap-3 shrink-0 ${className}`}>
+      <div className={`inline-flex items-center gap-2.5 sm:gap-3 shrink-0 ${className}`}>
         <div
           className={`${emblemSizes[size]} bg-[#050505] border border-white/20 flex items-center justify-center shrink-0 overflow-hidden shadow-sm`}
         >
@@ -31,7 +31,7 @@ export function A1Logo({
           />
         </div>
         {showText && (
-          <span className="font-display text-sm sm:text-base font-semibold tracking-[0.14em] text-white whitespace-nowrap uppercase">
+          <span className="font-display text-xs sm:text-sm md:text-base font-semibold tracking-[0.12em] sm:tracking-[0.14em] text-white whitespace-nowrap uppercase">
             {business.name}
           </span>
         )}
@@ -40,7 +40,7 @@ export function A1Logo({
   }
 
   return (
-    <div className={`inline-flex items-center gap-3 shrink-0 ${className}`}>
+    <div className={`inline-flex items-center gap-2.5 sm:gap-3 shrink-0 ${className}`}>
       <div
         className={`${emblemSizes[size]} bg-[#050505] border border-white/20 flex items-center justify-center shrink-0`}
         aria-hidden="true"
@@ -71,7 +71,7 @@ export function A1Logo({
         </svg>
       </div>
       {showText && (
-        <span className="font-display text-sm sm:text-base font-semibold tracking-[0.14em] text-white whitespace-nowrap uppercase">
+        <span className="font-display text-xs sm:text-sm md:text-base font-semibold tracking-[0.12em] sm:tracking-[0.14em] text-white whitespace-nowrap uppercase">
           A1 TILING PTY LTD
         </span>
       )}

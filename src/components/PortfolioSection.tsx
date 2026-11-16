@@ -110,7 +110,7 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
         <div
           role="tablist"
           aria-label="Filter projects by tiling category"
-          className="flex flex-wrap items-center gap-2 mb-10"
+          className="flex flex-nowrap overflow-x-auto no-scrollbar scroll-smooth gap-2 pb-2 sm:pb-0 sm:flex-wrap mb-8 sm:mb-10 -mx-6 px-6 sm:mx-0 sm:px-0"
         >
           {categories.map((category) => {
             const active = category === activeCategory;
@@ -121,7 +121,7 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
                 role="tab"
                 aria-selected={active}
                 onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2 text-xs font-medium tracking-wide transition-colors whitespace-nowrap shrink-0 border ${
+                className={`px-4 py-2.5 text-xs font-medium tracking-wide transition-colors whitespace-nowrap shrink-0 border cursor-pointer active:scale-95 ${
                   active
                     ? "bg-white text-[#050505] border-white font-semibold shadow-md"
                     : "bg-[#151619] text-[#B8B8B8] border-white/10 hover:border-white/30 hover:text-white"
@@ -236,11 +236,11 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
           role="dialog"
           aria-modal="true"
           aria-label={lightboxItem.title}
-          className="fixed inset-0 z-50 bg-[#050505]/95 text-white flex flex-col justify-between p-4 sm:p-8 backdrop-blur-md"
+          className="fixed inset-0 z-50 bg-[#050505]/98 text-white flex flex-col justify-between p-4 sm:p-8 backdrop-blur-md overflow-y-auto"
         >
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-4 shrink-0 pb-3">
             <div className="flex items-center gap-3 text-xs sm:text-sm">
-              <span className="px-2.5 py-1 bg-[#4B8CFF]/20 border border-[#4B8CFF]/40 text-[#4B8CFF] font-mono text-xs uppercase">
+              <span className="px-2.5 py-1 bg-[#4B8CFF]/20 border border-[#4B8CFF]/40 text-[#4B8CFF] font-mono text-xs uppercase font-medium">
                 {lightboxItem.category}
               </span>
               {lightboxItem.location && (
@@ -255,24 +255,24 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
               type="button"
               onClick={() => setLightboxItem(null)}
               aria-label="Close image viewer"
-              className="w-11 h-11 inline-flex items-center justify-center border border-white/20 text-white hover:border-white transition-colors bg-white/5"
+              className="w-10 h-10 sm:w-11 sm:h-11 inline-flex items-center justify-center border border-white/20 text-white hover:border-white transition-colors bg-white/5 active:bg-white/20 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="relative flex-1 flex items-center justify-center my-4 overflow-hidden">
+          <div className="relative flex-1 flex items-center justify-center my-3 sm:my-4 overflow-hidden min-h-[220px]">
             <img
               src={lightboxItem.imageUrl}
               alt={lightboxItem.imageAlt}
               referrerPolicy="no-referrer"
-              className="max-h-[70vh] max-w-full object-contain border border-white/10 shadow-2xl"
+              className="max-h-[42vh] sm:max-h-[60vh] max-w-full object-contain border border-white/10 shadow-2xl"
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-t border-white/15 pt-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 sm:gap-6 border-t border-white/15 pt-4 shrink-0">
             <div className="max-w-3xl">
-              <h3 className="font-display text-xl sm:text-2xl font-semibold text-white mb-1.5">
+              <h3 className="font-display text-lg sm:text-2xl font-semibold text-white mb-1.5 leading-snug">
                 {lightboxItem.title}
               </h3>
               <p className="text-xs sm:text-sm text-[#B8B8B8] leading-relaxed mb-3">
@@ -280,54 +280,56 @@ export function PortfolioSection({ onEnquireProject }: PortfolioSectionProps) {
               </p>
 
               {/* Lightbox Technical Details Strip */}
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-white/80">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-white/80">
                 {lightboxItem.material && (
                   <span className="inline-flex items-center gap-1.5">
-                    <Layers className="w-3.5 h-3.5 text-[#4B8CFF]" />
+                    <Layers className="w-3.5 h-3.5 text-[#4B8CFF] shrink-0" />
                     <strong className="text-white">Material:</strong> {lightboxItem.material}
                   </span>
                 )}
                 {lightboxItem.scope && (
                   <span className="inline-flex items-center gap-1.5">
-                    <Ruler className="w-3.5 h-3.5 text-[#4B8CFF]" />
+                    <Ruler className="w-3.5 h-3.5 text-[#4B8CFF] shrink-0" />
                     <strong className="text-white">Scope:</strong> {lightboxItem.scope}
                   </span>
                 )}
                 {lightboxItem.standards && (
                   <span className="inline-flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#4B8CFF]" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#4B8CFF] shrink-0" />
                     <strong className="text-white">Standards:</strong> {lightboxItem.standards}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
               <button
                 type="button"
                 onClick={() => scrollToQuote(lightboxItem.category)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#050505] text-xs font-semibold tracking-wider uppercase hover:bg-[#4B8CFF] hover:text-white transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-[#050505] text-xs font-semibold tracking-wider uppercase hover:bg-[#4B8CFF] hover:text-white transition-colors cursor-pointer active:scale-95 text-center"
               >
-                Enquire For This Finish
+                <span>Enquire For This Finish</span>
                 <ArrowUpRight className="w-4 h-4" />
               </button>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center justify-center gap-2">
                 <button
                   type="button"
                   onClick={showPrev}
                   aria-label="Previous project"
-                  className="w-10 h-10 border border-white/20 inline-flex items-center justify-center text-xs font-medium hover:border-white transition-colors bg-white/5"
+                  className="flex-1 sm:flex-initial h-10 sm:w-10 px-4 sm:px-0 border border-white/20 inline-flex items-center justify-center text-xs font-medium hover:border-white transition-colors bg-white/5 active:bg-white/15 cursor-pointer"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-4 h-4 mr-1 sm:mr-0" />
+                  <span className="sm:hidden text-xs">Prev</span>
                 </button>
                 <button
                   type="button"
                   onClick={showNext}
                   aria-label="Next project"
-                  className="w-10 h-10 border border-white/20 inline-flex items-center justify-center text-xs font-medium hover:border-white transition-colors bg-white/5"
+                  className="flex-1 sm:flex-initial h-10 sm:w-10 px-4 sm:px-0 border border-white/20 inline-flex items-center justify-center text-xs font-medium hover:border-white transition-colors bg-white/5 active:bg-white/15 cursor-pointer"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <span className="sm:hidden text-xs">Next</span>
+                  <ChevronRight className="w-4 h-4 ml-1 sm:ml-0" />
                 </button>
               </div>
             </div>

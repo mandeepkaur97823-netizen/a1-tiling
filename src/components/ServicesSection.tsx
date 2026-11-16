@@ -47,7 +47,7 @@ export function ServicesSection({ onEnquireService }: ServicesSectionProps) {
                     isEven ? "lg:order-2" : "lg:order-1"
                   }`}
                 >
-                  <div className="aspect-[4/3] w-full h-full overflow-hidden">
+                  <div className="aspect-[16/10] sm:aspect-[4/3] w-full h-full overflow-hidden">
                     <FallbackImage
                       src={service.imageUrl}
                       alt={service.imageAlt}
@@ -95,16 +95,16 @@ export function ServicesSection({ onEnquireService }: ServicesSectionProps) {
                     </ul>
                   </div>
 
-                  <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/10">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 pt-4 border-t border-white/10">
                     <button
                       type="button"
                       onClick={() => onEnquireService(service.quoteValue)}
-                      className="inline-flex items-center gap-2 px-6 py-3 text-xs font-semibold tracking-[0.14em] uppercase bg-white text-[#050505] hover:bg-[#4B8CFF] hover:text-white transition-colors whitespace-nowrap"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-semibold tracking-[0.14em] uppercase bg-white text-[#050505] hover:bg-[#4B8CFF] hover:text-white transition-colors whitespace-nowrap active:scale-95 cursor-pointer text-center"
                     >
-                      Enquire Now
+                      <span>Enquire Now</span>
                       <ArrowUpRight className="w-4 h-4" />
                     </button>
-                    <span className="text-xs text-[#B8B8B8]/70">
+                    <span className="text-[11px] sm:text-xs text-[#B8B8B8]/70 text-center sm:text-right">
                       Architectural service visual
                     </span>
                   </div>

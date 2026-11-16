@@ -939,10 +939,10 @@ export function AdminPanel({
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full md:w-auto">
             {/* Status Filter */}
-            <div className="flex items-center gap-1 text-xs">
-              <span className="text-[#B8B8B8] font-mono text-[11px] mr-1">
+            <div className="flex items-center gap-1.5 text-xs overflow-x-auto no-scrollbar py-1">
+              <span className="text-[#B8B8B8] font-mono text-[11px] mr-1 shrink-0">
                 Status:
               </span>
               {(
@@ -952,7 +952,7 @@ export function AdminPanel({
                   key={st}
                   type="button"
                   onClick={() => setStatusFilter(st)}
-                  className={`px-2.5 py-1 text-[11px] font-mono uppercase tracking-wider border transition-colors ${
+                  className={`px-2.5 py-1 text-[11px] font-mono uppercase tracking-wider border transition-colors shrink-0 cursor-pointer ${
                     statusFilter === st
                       ? "bg-white text-black border-white font-semibold"
                       : "bg-black/40 text-[#B8B8B8] border-white/10 hover:border-white/30"

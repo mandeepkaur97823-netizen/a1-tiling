@@ -11,6 +11,8 @@ import {
   Upload,
   AlertCircle,
   X,
+  MessageSquare,
+  Camera,
 } from "lucide-react";
 import { business } from "../config/business";
 import { FallbackImage } from "./FallbackImage";
@@ -219,17 +221,28 @@ export function QuoteSection({
               <div className="flex flex-col sm:flex-row lg:flex-col gap-3">
                 <a
                   href={`tel:${business.phoneInternational}`}
-                  className="inline-flex items-center gap-3 px-5 py-3.5 bg-[#151515] border border-white/15 hover:border-[#4B8CFF] transition-colors text-sm font-medium"
+                  className="inline-flex items-center gap-3 px-5 py-3.5 bg-[#151515] border border-white/15 hover:border-[#4B8CFF] transition-colors text-sm font-medium active:scale-98"
                 >
-                  <Phone className="w-4 h-4 text-[#4B8CFF]" />
+                  <Phone className="w-4 h-4 text-[#4B8CFF] shrink-0" />
                   <span>Call {business.phoneDisplay}</span>
                 </a>
                 <a
-                  href={`mailto:${business.email}`}
-                  className="inline-flex items-center gap-3 px-5 py-3.5 bg-[#151515] border border-white/15 hover:border-[#4B8CFF] transition-colors text-sm font-medium"
+                  href={`https://wa.me/${business.phoneInternational.replace(/\+/g, "")}?text=${encodeURIComponent(
+                    "Hi A1 Tiling, I would like to request a quote for a tiling project.",
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-5 py-3.5 bg-emerald-950/20 border border-emerald-500/30 hover:border-emerald-400 text-emerald-300 transition-colors text-sm font-medium active:scale-98"
                 >
-                  <Mail className="w-4 h-4 text-[#4B8CFF]" />
-                  <span>{business.email}</span>
+                  <MessageSquare className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Chat on WhatsApp</span>
+                </a>
+                <a
+                  href={`mailto:${business.email}`}
+                  className="inline-flex items-center gap-3 px-5 py-3.5 bg-[#151515] border border-white/15 hover:border-[#4B8CFF] transition-colors text-sm font-medium active:scale-98"
+                >
+                  <Mail className="w-4 h-4 text-[#4B8CFF] shrink-0" />
+                  <span className="truncate">{business.email}</span>
                 </a>
               </div>
             </div>
@@ -288,7 +301,7 @@ export function QuoteSection({
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   <div>
                     <label
                       htmlFor="quote-name"
@@ -303,7 +316,7 @@ export function QuoteSection({
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Your name"
-                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-sm placeholder:text-white/35 focus:outline-none focus:border-[#4B8CFF]"
+                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-base sm:text-sm placeholder:text-white/35 focus:outline-none focus:border-[#4B8CFF]"
                     />
                   </div>
 
@@ -321,12 +334,12 @@ export function QuoteSection({
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="04XX XXX XXX"
-                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-sm placeholder:text-white/35 focus:outline-none focus:border-[#4B8CFF]"
+                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-base sm:text-sm placeholder:text-white/35 focus:outline-none focus:border-[#4B8CFF]"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   <div>
                     <label
                       htmlFor="quote-email"
@@ -341,7 +354,7 @@ export function QuoteSection({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@example.com"
-                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-sm placeholder:text-white/35 focus:outline-none focus:border-[#4B8CFF]"
+                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-base sm:text-sm placeholder:text-white/35 focus:outline-none focus:border-[#4B8CFF]"
                     />
                   </div>
 
@@ -356,7 +369,7 @@ export function QuoteSection({
                       id="quote-location"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-sm focus:outline-none focus:border-[#4B8CFF]"
+                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-base sm:text-sm focus:outline-none focus:border-[#4B8CFF]"
                     >
                       {locationOptions.map((loc) => (
                         <option key={loc} value={loc}>
@@ -367,7 +380,7 @@ export function QuoteSection({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   <div>
                     <label
                       htmlFor="quote-service"
@@ -379,7 +392,7 @@ export function QuoteSection({
                       id="quote-service"
                       value={service}
                       onChange={(e) => setService(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-sm focus:outline-none focus:border-[#4B8CFF]"
+                      className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-base sm:text-sm focus:outline-none focus:border-[#4B8CFF]"
                     >
                       {serviceOptions.map((opt) => (
                         <option key={opt} value={opt}>
@@ -399,9 +412,9 @@ export function QuoteSection({
                           key={type}
                           type="button"
                           onClick={() => setProjectType(type)}
-                          className={`py-3 px-4 text-xs font-medium uppercase tracking-wider border transition-colors ${
+                          className={`py-3 px-4 text-xs font-semibold uppercase tracking-wider border transition-colors cursor-pointer active:scale-95 ${
                             projectType === type
-                              ? "bg-white text-[#050505] border-white"
+                              ? "bg-white text-[#050505] border-white shadow-sm"
                               : "bg-[#151515] text-[#B8B8B8] border-white/15 hover:border-white/40"
                           }`}
                         >
@@ -426,7 +439,7 @@ export function QuoteSection({
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Share approximate area, room or outdoor scope, tile style preferences, and ideal timeframe..."
-                    className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-sm placeholder:text-white/35 focus:outline-none focus:border-[#4B8CFF]"
+                    className="w-full px-4 py-3 bg-[#151515] border border-white/15 text-white text-base sm:text-sm placeholder:text-white/35 focus:outline-none focus:border-[#4B8CFF]"
                   />
                 </div>
 
@@ -436,8 +449,15 @@ export function QuoteSection({
                     Optional Site / Inspiration Photo
                   </span>
                   {!photoDataUrl ? (
-                    <label className="flex items-center justify-center gap-2.5 px-4 py-3.5 bg-[#151515] border border-dashed border-white/25 hover:border-[#4B8CFF] cursor-pointer text-xs text-[#B8B8B8] transition-colors">
-                      <Upload className="w-4 h-4 text-[#4B8CFF]" />
+                    <label className="flex items-center justify-center gap-2.5 px-4 py-4 bg-[#151515] border border-dashed border-white/25 hover:border-[#4B8CFF] cursor-pointer text-xs text-[#B8B8B8] transition-colors active:bg-white/5">
+                      <Camera className="w-4 h-4 text-[#4B8CFF]" />
+                      <span>Take photo or upload architectural plan</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
+                        className="sr-only"
+                      />
                       <span>Attach space photo or architectural reference</span>
                       <input
                         type="file"
