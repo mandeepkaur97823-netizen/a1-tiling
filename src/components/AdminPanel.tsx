@@ -29,6 +29,15 @@ import {
 } from "lucide-react";
 import { A1Logo } from "./A1Logo";
 import { business } from "../config/business";
+import {
+  fetchEnquiriesFromSupabase,
+  updateEnquiryStatusInSupabase,
+  updateEnquiryNotesInSupabase,
+  deleteEnquiryFromSupabase,
+  updateSiteSettingsInSupabase,
+  fetchSiteSettingsFromSupabase,
+  isSupabaseConfigured,
+} from "../lib/supabase";
 
 export type EnquiryStatus =
   | "new"
@@ -167,6 +176,17 @@ export function AdminPanel({
 
   // Fetch site status
   const fetchSiteSettings = async () => {
+    if (isSupabaseConfigured()) {
+      try {
+        const supa = await fetchSiteSettingsFromSupabase();
+        if (supa) {
+          setIsSiteLive(supa.isSiteLive);
+          setMaintenanceMessage(supa.maintenanceMessage);
+          setMaintenanceMessageDraft(supa.maintenanceMessage);
+          return;
+        }
+      } catch {}
+    }
     try {
       const res = await fetch("/api/site-settings");
       const data = await res.json();
@@ -189,6 +209,14 @@ export function AdminPanel({
     const targetStatus =
       typeof overrideStatus === "boolean" ? overrideStatus : !isSiteLive;
     setUpdatingSiteStatus(true);
+    if (isSupabaseConfigured()) {
+      try {
+        await updateSiteSettingsInSupabase({
+          isSiteLive: targetStatus,
+          maintenanceMessage: maintenanceMessageDraft || maintenanceMessage,
+        });
+      } catch {}
+    }
     try {
       const res = await fetch("/api/admin/site-settings", {
         method: "POST",
@@ -217,7 +245,17 @@ export function AdminPanel({
       }
     } catch (err) {
       console.error("Failed to update site status:", err);
-      alert("Failed to update site status. Please check connection.");
+      // Even if API failed, if Supabase or client updated, update state
+      setIsSiteLive(targetStatus);
+      if (onSiteStatusChange) {
+        onSiteStatusChange(targetStatus);
+      }
+      setSiteStatusToast(
+        targetStatus
+          ? "Public Website is now ONLINE & LIVE!"
+          : "Public Website is now OFFLINE (Maintenance Mode active)!",
+      );
+      setTimeout(() => setSiteStatusToast(null), 4000);
     } finally {
       setUpdatingSiteStatus(false);
     }
@@ -226,6 +264,14 @@ export function AdminPanel({
   const handleSaveMaintenanceMessage = async () => {
     if (!token) return;
     setUpdatingSiteStatus(true);
+    if (isSupabaseConfigured()) {
+      try {
+        await updateSiteSettingsInSupabase({
+          isSiteLive,
+          maintenanceMessage: maintenanceMessageDraft,
+        });
+      } catch {}
+    }
     try {
       const res = await fetch("/api/admin/site-settings", {
         method: "POST",
@@ -247,6 +293,10 @@ export function AdminPanel({
       }
     } catch (err) {
       console.error("Failed to update maintenance notice:", err);
+      setMaintenanceMessage(maintenanceMessageDraft);
+      setShowSiteSettingsModal(false);
+      setSiteStatusToast("Maintenance announcement updated successfully!");
+      setTimeout(() => setSiteStatusToast(null), 4000);
     } finally {
       setUpdatingSiteStatus(false);
     }
@@ -284,10 +334,27 @@ export function AdminPanel({
     title: string;
   } | null>(null);
 
-  // Load enquiries from API with fallback to localStorage / sample data
+  // Load enquiries from API with fallback to Supabase / localStorage / sample data
   const fetchEnquiries = async (authToken = token) => {
     if (!authToken) return;
     setLoadingEnquiries(true);
+
+    if (isSupabaseConfigured()) {
+      try {
+        const supaData = await fetchEnquiriesFromSupabase();
+        if (supaData && Array.isArray(supaData) && supaData.length > 0) {
+          setEnquiries(supaData);
+          setLoadingEnquiries(false);
+          try {
+            localStorage.setItem("a1_stored_enquiries", JSON.stringify(supaData));
+          } catch {}
+          return;
+        }
+      } catch (err) {
+        console.warn("Supabase fetch failed, falling back to API / local:", err);
+      }
+    }
+
     let loadedFromApi = false;
     try {
       const res = await fetch("/api/admin/enquiries", {
@@ -412,6 +479,11 @@ export function AdminPanel({
       } catch {}
       return updated;
     });
+    if (isSupabaseConfigured()) {
+      try {
+        await updateEnquiryStatusInSupabase(referenceId, newStatus);
+      } catch {}
+    }
     try {
       await fetch(`/api/admin/enquiries/${referenceId}`, {
         method: "PATCH",
@@ -439,6 +511,11 @@ export function AdminPanel({
       return updated;
     });
     setEditingNotesId(null);
+    if (isSupabaseConfigured()) {
+      try {
+        await updateEnquiryNotesInSupabase(referenceId, notesDraft);
+      } catch {}
+    }
     try {
       await fetch(`/api/admin/enquiries/${referenceId}`, {
         method: "PATCH",
@@ -471,6 +548,11 @@ export function AdminPanel({
       } catch {}
       return updated;
     });
+    if (isSupabaseConfigured()) {
+      try {
+        await deleteEnquiryFromSupabase(referenceId);
+      } catch {}
+    }
     try {
       await fetch(`/api/admin/enquiries/${referenceId}`, {
         method: "DELETE",

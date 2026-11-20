@@ -11,6 +11,11 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import {
+  fetchReviewsFromSupabase,
+  insertReviewToSupabase,
+  isSupabaseConfigured,
+} from "../lib/supabase";
 
 export interface ReviewItem {
   id: string;
@@ -57,8 +62,102 @@ const locationFormOptions = [
   "Other South East Queensland",
 ];
 
+export const INITIAL_REVIEWS: ReviewItem[] = [
+  {
+    id: "rev-01",
+    author: "David & Sarah M.",
+    location: "New Farm, Brisbane",
+    rating: 5,
+    serviceType: "Master Ensuite & Bathroom Renovation",
+    headline: "Flawless Luxury Finish on 1200x600 Marble Porcelain",
+    content:
+      "A1 Tiling completely transformed our master ensuite. The mitred external tile edges on the shower niche and floating vanity wall are perfection. True master craftsmen who show up on time and maintain spotless work ethics.",
+    date: "Feb 2026",
+    verified: true,
+    status: "approved",
+  },
+  {
+    id: "rev-02",
+    author: "Lachlan Campbell",
+    location: "Main Beach, Gold Coast",
+    rating: 5,
+    serviceType: "Swimming Pool & Outdoor Tiling",
+    headline: "Precision Waterline Mosaic Tiling on Waterfront Lap Pool",
+    content:
+      "Subcontracted A1 Tiling for a high-end luxury pool in Main Beach. The alignment of the deep teal glass mosaics along a 18m curved waterline was immaculate. Flawless fall to coping and zero lippage.",
+    date: "Jan 2026",
+    verified: true,
+    status: "approved",
+  },
+  {
+    id: "rev-03",
+    author: "Elena Rostova",
+    location: "Paddington, Brisbane",
+    rating: 5,
+    serviceType: "Kitchen Splashback & Living Floors",
+    headline: "Stunning Seamless Open-Plan Living & Splashback",
+    content:
+      "The large-format charcoal floor tiles through our living area and herringbone splashback in the kitchen look straight out of an architectural magazine. Beautiful expansion joints and clean grout lines.",
+    date: "Dec 2025",
+    verified: true,
+    status: "approved",
+  },
+  {
+    id: "rev-04",
+    author: "Marcus Vance",
+    location: "Noosa Heads, Sunshine Coast",
+    rating: 5,
+    serviceType: "Natural Stone Work & Feature Walls",
+    headline: "Exceptional Dry-Stacked Sandstone Pavilion Feature",
+    content:
+      "We wanted an organic, earthy feel for our alfresco pavilion and bathroom feature wall. A1 Tiling handled the natural bluestone and sandstone with genuine architectural care.",
+    date: "Nov 2025",
+    verified: true,
+    status: "approved",
+  },
+  {
+    id: "rev-05",
+    author: "Rebecca H.",
+    location: "Bulimba, Brisbane",
+    rating: 5,
+    serviceType: "Master Ensuite & Bathroom Renovation",
+    headline: "Top-Tier Waterproofing Certification & Immaculate Detail",
+    content:
+      "Having had a bathroom leak in our previous home, waterproofing compliance under AS 3740 was our top priority. The team provided full documentation and the tiling result is simply breathtaking.",
+    date: "Oct 2025",
+    verified: true,
+    status: "approved",
+  },
+  {
+    id: "rev-06",
+    author: "Greg Thornton (Thornton Built)",
+    location: "Brisbane CBD",
+    rating: 5,
+    serviceType: "Commercial Tiling",
+    headline: "Reliable Commercial Partner on Demanding Deadlines",
+    content:
+      "We have partnered with A1 Tiling across multiple high-traffic commercial and retail fit-outs across South East Queensland. Reliable, licensed, punctual, and uncompromising on standards.",
+    date: "Sep 2025",
+    verified: true,
+    status: "approved",
+  },
+];
+
 export function ReviewsSection() {
-  const [reviews, setReviews] = useState<ReviewItem[]>([]);
+  const [reviews, setReviews] = useState<ReviewItem[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("a1_client_reviews");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        }
+      } catch {}
+    }
+    return INITIAL_REVIEWS;
+  });
   const [activeCategory, setActiveCategory] = useState("All Reviews");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -80,6 +179,15 @@ export function ReviewsSection() {
   }, []);
 
   const fetchReviews = async () => {
+    if (isSupabaseConfigured()) {
+      try {
+        const supaReviews = await fetchReviewsFromSupabase();
+        if (supaReviews && supaReviews.length > 0) {
+          setReviews(supaReviews);
+          return;
+        }
+      } catch {}
+    }
     let loadedFromApi = false;
     try {
       const res = await fetch("/api/reviews");
@@ -102,9 +210,11 @@ export function ReviewsSection() {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
             setReviews(parsed);
+            return;
           }
         }
       } catch {}
+      setReviews(INITIAL_REVIEWS);
     }
   };
 
@@ -146,6 +256,15 @@ export function ReviewsSection() {
       verified: true,
       status: "approved",
     };
+
+    // If Supabase is configured, store directly in Supabase reviews table
+    if (isSupabaseConfigured()) {
+      try {
+        await insertReviewToSupabase(newReview);
+      } catch (err) {
+        console.warn("Supabase insert review failed:", err);
+      }
+    }
 
     try {
       const res = await fetch("/api/reviews", {

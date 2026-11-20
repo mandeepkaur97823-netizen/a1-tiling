@@ -13,6 +13,10 @@ import { Footer } from "./components/Footer";
 import { MobileActionBar } from "./components/MobileActionBar";
 import { AdminPanel } from "./components/AdminPanel";
 import { MaintenanceScreen } from "./components/MaintenanceScreen";
+import {
+  fetchSiteSettingsFromSupabase,
+  isSupabaseConfigured,
+} from "./lib/supabase";
 
 function checkIsAdminRoute(): boolean {
   if (typeof window === "undefined") return false;
@@ -35,6 +39,15 @@ export default function App() {
   const [preselectedLocation, setPreselectedLocation] = useState("");
 
   const fetchSiteSettings = async () => {
+    if (isSupabaseConfigured()) {
+      try {
+        const supaSettings = await fetchSiteSettingsFromSupabase();
+        if (supaSettings) {
+          setSiteSettings(supaSettings);
+          return;
+        }
+      } catch {}
+    }
     try {
       const res = await fetch("/api/site-settings");
       const data = await res.json();

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { business } from "../config/business";
 import { FallbackImage } from "./FallbackImage";
+import { insertEnquiryToSupabase, isSupabaseConfigured } from "../lib/supabase";
 
 interface QuoteSectionProps {
   preselectedService: string;
@@ -157,6 +158,15 @@ export function QuoteSection({
       photoDataUrl: photoDataUrl || undefined,
       status: "new" as const,
     };
+
+    // If Supabase is configured, push directly to Supabase enquiries table
+    if (isSupabaseConfigured()) {
+      try {
+        await insertEnquiryToSupabase(newEnquiry);
+      } catch (err) {
+        console.warn("Supabase insert enquiry failed:", err);
+      }
+    }
 
     try {
       const res = await fetch(business.enquiryEndpoint, {
