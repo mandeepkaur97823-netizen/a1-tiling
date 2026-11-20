@@ -870,22 +870,6 @@ export function AdminPanel({
                   />
                   SITE: {isSiteLive ? "ONLINE (LIVE)" : "OFFLINE (MAINTENANCE)"}
                 </span>
-
-                <button
-                  type="button"
-                  onClick={() => setShowSupabaseModal(true)}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 border text-[11px] font-mono uppercase tracking-wider font-semibold cursor-pointer transition-colors ${
-                    isSupabaseConfigured()
-                      ? "bg-[#3ECF8E]/15 border-[#3ECF8E]/40 text-[#3ECF8E] hover:bg-[#3ECF8E]/25"
-                      : "bg-amber-500/15 border-amber-500/40 text-amber-400 hover:bg-amber-500/25 animate-pulse"
-                  }`}
-                  title="Configure Supabase Database Connection"
-                >
-                  <Database className="w-3 h-3" />
-                  <span>
-                    {isSupabaseConfigured() ? "Supabase: Connected" : "Link Supabase"}
-                  </span>
-                </button>
               </div>
               <p className="text-[11px] text-[#B8B8B8] font-mono">
                 Queensland Client Enquiries &amp; Project Quotes
@@ -1144,69 +1128,39 @@ export function AdminPanel({
           </div>
         </div>
 
-        {/* Supabase Database Connection Status Banner */}
-        <div
-          className={`mb-8 border p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
-            isSupabaseConfigured()
-              ? "bg-[#0b1411]/90 border-[#3ECF8E]/30"
-              : "bg-gradient-to-r from-amber-950/30 to-[#121316] border-amber-500/40 shadow-lg"
-          }`}
-        >
-          <div className="flex items-start gap-3.5">
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center border shrink-0 ${
-                isSupabaseConfigured()
-                  ? "bg-[#3ECF8E]/15 border-[#3ECF8E]/40 text-[#3ECF8E]"
-                  : "bg-amber-500/15 border-amber-500/40 text-amber-400"
-              }`}
-            >
-              <Database className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-white">
-                  Database Link:
-                </h3>
-                <span
-                  className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[11px] font-mono font-bold uppercase tracking-wider border ${
-                    isSupabaseConfigured()
-                      ? "bg-[#3ECF8E]/20 border-[#3ECF8E]/40 text-[#3ECF8E]"
-                      : "bg-amber-500/20 border-amber-500/40 text-amber-300 animate-pulse"
-                  }`}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      isSupabaseConfigured()
-                        ? "bg-[#3ECF8E]"
-                        : "bg-amber-400 animate-ping"
-                    }`}
-                  />
-                  {isSupabaseConfigured()
-                    ? "SUPABASE CONNECTED (REAL-TIME SYNC ACTIVE)"
-                    : "SUPABASE NOT LINKED YET"}
-                </span>
+        {/* Cloud Database Link Prompt (only shown if not configured) */}
+        {!isSupabaseConfigured() && (
+          <div className="mb-8 border p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all bg-gradient-to-r from-amber-950/30 to-[#121316] border-amber-500/40 shadow-lg">
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center border shrink-0 bg-amber-500/15 border-amber-500/40 text-amber-400">
+                <Database className="w-5 h-5" />
               </div>
-              <p className="text-xs text-[#B8B8B8] mt-1 leading-relaxed max-w-2xl">
-                {isSupabaseConfigured()
-                  ? "Every quote enquiry and review submitted on your live Vercel website syncs instantly to your Supabase PostgreSQL database."
-                  : "Link your Supabase Project URL and Anon Public Key so client quotes submitted on your live Vercel website appear here in real time on all devices."}
-              </p>
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+                    Database Link:
+                  </h3>
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[11px] font-mono font-bold uppercase tracking-wider border bg-amber-500/20 border-amber-500/40 text-amber-300 animate-pulse">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                    DATABASE NOT LINKED YET
+                  </span>
+                </div>
+                <p className="text-xs text-[#B8B8B8] mt-1 leading-relaxed max-w-2xl">
+                  Connect your cloud database so client quotes submitted on your live website appear here in real time across all devices.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <button
-            type="button"
-            onClick={() => setShowSupabaseModal(true)}
-            className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 transition-all cursor-pointer shrink-0 ${
-              isSupabaseConfigured()
-                ? "border border-[#3ECF8E]/40 text-[#3ECF8E] hover:bg-[#3ECF8E]/10"
-                : "bg-[#3ECF8E] text-[#050505] hover:bg-white shadow-lg shadow-[#3ECF8E]/20"
-            }`}
-          >
-            <Database className="w-4 h-4" />
-            <span>{isSupabaseConfigured() ? "Manage Supabase" : "Link Supabase Now"}</span>
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setShowSupabaseModal(true)}
+              className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 transition-all cursor-pointer shrink-0 bg-[#3ECF8E] text-[#050505] hover:bg-white shadow-lg shadow-[#3ECF8E]/20"
+            >
+              <Database className="w-4 h-4" />
+              <span>Link Database Now</span>
+            </button>
+          </div>
+        )}
 
         {/* Metric Cards Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
