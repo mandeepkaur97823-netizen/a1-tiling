@@ -256,31 +256,77 @@ async function startServer() {
       typeof body.photoDataUrl === "string" ? body.photoDataUrl : undefined;
     const hasPhoto = Boolean(photoDataUrl);
 
-    if (!fullName || fullName.length < 2) {
-      res.status(400).json({ error: "Please provide your full name." });
+    // Bot honeypot check
+    if (body.company_tax_id) {
+      res.json({
+        ok: true,
+        referenceId: `A1-${Date.now().toString(36).toUpperCase().slice(-6)}`,
+        message: "Enquiry received.",
+      });
       return;
     }
-    if (!phone || phone.replace(/\D/g, "").length < 8) {
-      res
-        .status(400)
-        .json({ error: "Please enter a valid Australian phone number." });
+
+    // Strict Full Name validation (prevent single names, digits, test words)
+    const nameWords = fullName.split(/\s+/).filter(Boolean);
+    if (!fullName || fullName.length < 3 || nameWords.length < 2 || /\d/.test(fullName)) {
+      res.status(400).json({ error: "Please provide both first and last name (e.g. John Smith)." });
       return;
     }
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const spamNames = ["test", "asdf", "qwerty", "admin", "fake", "spam", "none", "dummy"];
+    if (nameWords.some((w) => spamNames.includes(w.toLowerCase()))) {
+      res.status(400).json({ error: "Please enter a genuine client name." });
+      return;
+    }
+
+    // Strict Australian phone validation
+    const digits = phone.replace(/\D/g, "");
+    const fakeSamples = ["1234567890", "0123456789", "9876543210", "0412345678", "0400000000", "0411111111", "0422222222"];
+    if (
+      !digits ||
+      /^(\d)\1+$/.test(digits) ||
+      fakeSamples.includes(digits) ||
+      !(
+        (digits.startsWith("04") && digits.length === 10) ||
+        (digits.startsWith("614") && digits.length === 11) ||
+        (digits.startsWith("07") && digits.length === 10) ||
+        (digits.startsWith("617") && digits.length === 11) ||
+        ((digits.startsWith("02") || digits.startsWith("03") || digits.startsWith("08")) && digits.length === 10)
+      )
+    ) {
+      res.status(400).json({
+        error: "Please enter a valid 10-digit Australian phone number (04XX XXX XXX or 07 XXXX XXXX).",
+      });
+      return;
+    }
+
+    // Strict Email validation & fake domain blocking
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email || !emailRegex.test(email)) {
       res.status(400).json({ error: "Please enter a valid email address." });
       return;
     }
-    if (!location) {
-      res.status(400).json({ error: "Please select your project location." });
+    const domain = email.split("@")[1]?.toLowerCase() || "";
+    const blockedDomains = ["test.com", "example.com", "asdf.com", "fake.com", "none.com", "mailinator.com", "tempmail.com"];
+    if (blockedDomains.includes(domain)) {
+      res.status(400).json({ error: "Please provide an active, genuine email address." });
       return;
     }
+
+    // Suburb & Location validation
+    if (!location || location.length < 4) {
+      res.status(400).json({ error: "Please enter your Queensland project suburb and postcode." });
+      return;
+    }
+
     if (!service) {
-      res.status(400).json({ error: "Please select the required service." });
+      res.status(400).json({ error: "Please select the required tiling service." });
       return;
     }
-    if (!description || description.length < 10) {
+
+    // Description validation (at least 15 characters, no repeating spam)
+    if (!description || description.length < 15 || /(.)\1{6,}/.test(description)) {
       res.status(400).json({
-        error: "Please include brief project details (at least 10 characters).",
+        error: "Please provide meaningful details about your tiling scope (minimum 15 characters).",
       });
       return;
     }
