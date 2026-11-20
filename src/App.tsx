@@ -5,6 +5,7 @@ import { IntroSection } from "./components/IntroSection";
 import { ServicesSection } from "./components/ServicesSection";
 import { PortfolioSection } from "./components/PortfolioSection";
 import { WhyChooseSection } from "./components/WhyChooseSection";
+import { ReviewsSection } from "./components/ReviewsSection";
 import { ServiceAreasSection } from "./components/ServiceAreasSection";
 import { QuoteSection } from "./components/QuoteSection";
 import { ContactInstagramSection } from "./components/ContactInstagramSection";
@@ -135,6 +136,7 @@ export default function App() {
         <ServicesSection onEnquireService={handleEnquireService} />
         <PortfolioSection onEnquireProject={handleEnquireService} />
         <WhyChooseSection />
+        <ReviewsSection />
         <ServiceAreasSection onSelectLocation={handleSelectLocation} />
         <QuoteSection
           preselectedService={preselectedService}

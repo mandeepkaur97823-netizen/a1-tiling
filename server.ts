@@ -43,7 +43,39 @@ export interface SiteSettings {
   updatedAt: string;
 }
 
+export interface StoredReview {
+  id: string;
+  author: string;
+  location: string;
+  rating: number; // 1 to 5
+  serviceType: string;
+  headline: string;
+  content: string;
+  date: string;
+  verified: boolean;
+  status: "approved" | "pending" | "hidden";
+}
+
 const SETTINGS_FILE = path.resolve(process.cwd(), "data", "settings.json");
+const REVIEWS_FILE = path.resolve(process.cwd(), "data", "reviews.json");
+
+async function loadReviews(): Promise<StoredReview[]> {
+  try {
+    const raw = await fs.readFile(REVIEWS_FILE, "utf-8");
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+async function persistReviews(reviews: StoredReview[]): Promise<void> {
+  try {
+    await fs.mkdir(path.dirname(REVIEWS_FILE), { recursive: true });
+    await fs.writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Failed to persist reviews:", err);
+  }
+}
 
 const DEFAULT_SETTINGS: SiteSettings = {
   isSiteLive: true,
@@ -285,6 +317,62 @@ async function startServer() {
   });
 
   // ==========================================
+  // PUBLIC CLIENT REVIEWS ENDPOINTS
+  // ==========================================
+
+  // Public: Get all approved reviews
+  app.get("/api/reviews", async (_req, res) => {
+    const reviews = await loadReviews();
+    const approved = reviews.filter((r) => r.status !== "hidden");
+    res.json({ ok: true, reviews: approved });
+  });
+
+  // Public: Submit a new review
+  app.post("/api/reviews", async (req, res) => {
+    const { author, location, rating, serviceType, headline, content } = req.body ?? {};
+
+    if (!author || typeof author !== "string" || author.trim().length < 2) {
+      res.status(400).json({ ok: false, error: "Please enter your name (minimum 2 characters)." });
+      return;
+    }
+    if (!content || typeof content !== "string" || content.trim().length < 5) {
+      res.status(400).json({ ok: false, error: "Please write a brief review message (minimum 5 characters)." });
+      return;
+    }
+
+    const numericRating = Math.max(1, Math.min(5, Math.round(Number(rating) || 5)));
+    const now = new Date();
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const dateFormatted = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+
+    const newReview: StoredReview = {
+      id: `rev-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      author: author.trim(),
+      location: (location && String(location).trim()) || "Queensland",
+      rating: numericRating,
+      serviceType: (serviceType && String(serviceType).trim()) || "Tiling Project",
+      headline: (headline && String(headline).trim()) || "Outstanding Tiling Craftsmanship",
+      content: content.trim(),
+      date: dateFormatted,
+      verified: true,
+      status: "approved",
+    };
+
+    const all = await loadReviews();
+    all.unshift(newReview);
+    await persistReviews(all);
+
+    res.status(201).json({
+      ok: true,
+      message: "Thank you! Your review has been submitted and published.",
+      review: newReview,
+    });
+  });
+
+  // ==========================================
   // ADMIN AUTHENTICATION & MANAGEMENT ENDPOINTS
   // ==========================================
 
@@ -431,6 +519,48 @@ async function startServer() {
 
     await persistSiteSettings(updated);
     res.json({ ok: true, settings: updated });
+  });
+
+  // Admin: Get all reviews
+  app.get("/api/admin/reviews", async (req, res) => {
+    if (!isValidAdmin(req)) {
+      res.status(401).json({ error: "Unauthorized access" });
+      return;
+    }
+    const all = await loadReviews();
+    res.json({ ok: true, reviews: all });
+  });
+
+  // Admin: Delete a review
+  app.delete("/api/admin/reviews/:id", async (req, res) => {
+    if (!isValidAdmin(req)) {
+      res.status(401).json({ error: "Unauthorized access" });
+      return;
+    }
+    const { id } = req.params;
+    let all = await loadReviews();
+    all = all.filter((r) => r.id !== id);
+    await persistReviews(all);
+    res.json({ ok: true, deleted: id });
+  });
+
+  // Admin: Toggle review status (approved/hidden)
+  app.patch("/api/admin/reviews/:id", async (req, res) => {
+    if (!isValidAdmin(req)) {
+      res.status(401).json({ error: "Unauthorized access" });
+      return;
+    }
+    const { id } = req.params;
+    const { status } = req.body ?? {};
+    const all = await loadReviews();
+    const idx = all.findIndex((r) => r.id === id);
+    if (idx !== -1 && status) {
+      all[idx].status = status;
+      await persistReviews(all);
+      res.json({ ok: true, review: all[idx] });
+    } else {
+      res.status(404).json({ error: "Review not found" });
+    }
   });
 
   // Serve Single Page Application

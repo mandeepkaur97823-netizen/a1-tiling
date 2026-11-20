@@ -1,0 +1,74 @@
+[
+  {
+    "id": "rev-1",
+    "author": "Lachlan & Sophie M.",
+    "location": "New Farm, Brisbane",
+    "rating": 5,
+    "serviceType": "Master Ensuite & Bathroom Renovation",
+    "headline": "Exceptional tiling precision – true master craftsmen",
+    "content": "A1 Tiling completed our master ensuite renovation with large-format porcelain slabs and herringbone feature tiles. The grout lines are laser straight, the waterproofing was thoroughly done to Australian standards, and the team left the site spotless every day. Highly recommended!",
+    "date": "November 2026",
+    "verified": true,
+    "status": "approved"
+  },
+  {
+    "id": "rev-2",
+    "author": "Marcus Davies",
+    "location": "Main Beach, Gold Coast",
+    "rating": 5,
+    "serviceType": "Outdoor Living & Swimming Pool Tiling",
+    "headline": "Flawless pool waterline and coping finishes",
+    "content": "We engaged A1 Tiling for our pool waterline glass mosaics and surrounding alfresco travertine paving. Their attention to levels and mitred corner joints is unmatched. Outstanding communication and delivered ahead of schedule.",
+    "date": "October 2026",
+    "verified": true,
+    "status": "approved"
+  },
+  {
+    "id": "rev-3",
+    "author": "Elena Rostova",
+    "location": "Paddington, Brisbane",
+    "rating": 5,
+    "serviceType": "Kitchen Splashback & Living Floors",
+    "headline": "Stunning marble waterfall island & precision floor alignment",
+    "content": "From the initial quote to the final clean, A1 Tiling was professional, punctual, and highly skilled. The mitred 45-degree waterfall edge on our marble kitchen island is a work of art. Best tilers in Queensland!",
+    "date": "October 2026",
+    "verified": true,
+    "status": "approved"
+  },
+  {
+    "id": "rev-4",
+    "author": "David Chen",
+    "location": "Noosa Heads, Sunshine Coast",
+    "rating": 5,
+    "serviceType": "Natural Stone Feature Wall & Bath Suite",
+    "headline": "Architectural stone masonry at its finest",
+    "content": "The custom dry-stacked stone feature wall in our Noosa holiday home exceeded all expectations. The texture and lighting reveal the depth of their stonework. Honest pricing, licensed QBCC work, and top-tier execution.",
+    "date": "September 2026",
+    "verified": true,
+    "status": "approved"
+  },
+  {
+    "id": "rev-5",
+    "author": "Brett & Sarah W.",
+    "location": "Bulimba, Brisbane",
+    "rating": 5,
+    "serviceType": "Wall & Floor Tiling (Full House Renovation)",
+    "headline": "Seamless large-format tiles with zero lippage",
+    "content": "Tiled over 180sqm of open-plan living and wet areas. Lippage-free leveling, immaculate silicone expansion joints, and great advice on tile layout during the prep stage. Couldn't be happier with the outcome.",
+    "date": "September 2026",
+    "verified": true,
+    "status": "approved"
+  },
+  {
+    "id": "rev-6",
+    "author": "Amanda Thornton",
+    "location": "Broadbeach Waters, Gold Coast",
+    "rating": 5,
+    "serviceType": "Bathroom & Balcony Waterproofing & Tiling",
+    "headline": "Prompt quote, reliable timeline, and flawless finish",
+    "content": "After dealing with poor workmanship from previous contractors, A1 Tiling came in and rectified our leaking balcony tiles, reapplied certified waterproofing, and re-tiled beautifully. Absolute lifesavers.",
+    "date": "August 2026",
+    "verified": true,
+    "status": "approved"
+  }
+]
