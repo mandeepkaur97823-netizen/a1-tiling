@@ -26,6 +26,8 @@ import {
   PowerOff,
   Globe,
   Wrench,
+  Database,
+  X,
 } from "lucide-react";
 import { A1Logo } from "./A1Logo";
 import { business } from "../config/business";
@@ -37,6 +39,10 @@ import {
   updateSiteSettingsInSupabase,
   fetchSiteSettingsFromSupabase,
   isSupabaseConfigured,
+  getSupabaseConfig,
+  saveSupabaseConfig,
+  clearSupabaseConfig,
+  testSupabaseConnection,
 } from "../lib/supabase";
 
 export type EnquiryStatus =
@@ -333,6 +339,60 @@ export function AdminPanel({
     url: string;
     title: string;
   } | null>(null);
+
+  // Supabase connection modal & state
+  const [showSupabaseModal, setShowSupabaseModal] = useState(false);
+  const [supabaseUrlInput, setSupabaseUrlInput] = useState(() => getSupabaseConfig().url);
+  const [supabaseKeyInput, setSupabaseKeyInput] = useState(() => getSupabaseConfig().anonKey);
+  const [supabaseTestStatus, setSupabaseTestStatus] = useState<{
+    testing: boolean;
+    success?: boolean;
+    message?: string;
+  }>({ testing: false });
+
+  const handleSaveAndTestSupabase = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanUrl = supabaseUrlInput.trim();
+    const cleanKey = supabaseKeyInput.trim();
+    if (!cleanUrl || !cleanKey) {
+      setSupabaseTestStatus({
+        testing: false,
+        success: false,
+        message: "Please enter both your Supabase Project URL and Anon Public Key.",
+      });
+      return;
+    }
+    setSupabaseTestStatus({ testing: true, message: "Testing connection to Supabase database..." });
+    const res = await testSupabaseConnection(cleanUrl, cleanKey);
+    if (res.ok) {
+      saveSupabaseConfig(cleanUrl, cleanKey);
+      setSupabaseTestStatus({
+        testing: false,
+        success: true,
+        message: `Database linked successfully! Found ${res.count ?? 0} existing enquiries.`,
+      });
+      fetchEnquiries();
+      setTimeout(() => {
+        setShowSupabaseModal(false);
+      }, 1600);
+    } else {
+      setSupabaseTestStatus({
+        testing: false,
+        success: false,
+        message: `Connection failed: ${res.error}. Make sure you executed supabase_schema.sql in your Supabase SQL Editor.`,
+      });
+    }
+  };
+
+  const handleDisconnectSupabase = () => {
+    if (window.confirm("Are you sure you want to disconnect Supabase?")) {
+      clearSupabaseConfig();
+      setSupabaseUrlInput("");
+      setSupabaseKeyInput("");
+      setSupabaseTestStatus({ testing: false, success: false, message: "Supabase disconnected." });
+      fetchEnquiries();
+    }
+  };
 
   // Load enquiries from API with fallback to Supabase / localStorage / sample data
   const fetchEnquiries = async (authToken = token) => {
@@ -810,6 +870,22 @@ export function AdminPanel({
                   />
                   SITE: {isSiteLive ? "ONLINE (LIVE)" : "OFFLINE (MAINTENANCE)"}
                 </span>
+
+                <button
+                  type="button"
+                  onClick={() => setShowSupabaseModal(true)}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 border text-[11px] font-mono uppercase tracking-wider font-semibold cursor-pointer transition-colors ${
+                    isSupabaseConfigured()
+                      ? "bg-[#3ECF8E]/15 border-[#3ECF8E]/40 text-[#3ECF8E] hover:bg-[#3ECF8E]/25"
+                      : "bg-amber-500/15 border-amber-500/40 text-amber-400 hover:bg-amber-500/25 animate-pulse"
+                  }`}
+                  title="Configure Supabase Database Connection"
+                >
+                  <Database className="w-3 h-3" />
+                  <span>
+                    {isSupabaseConfigured() ? "Supabase: Connected" : "Link Supabase"}
+                  </span>
+                </button>
               </div>
               <p className="text-[11px] text-[#B8B8B8] font-mono">
                 Queensland Client Enquiries &amp; Project Quotes
@@ -818,6 +894,15 @@ export function AdminPanel({
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => setShowSupabaseModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 border border-white/15 text-xs font-mono text-[#B8B8B8] hover:text-white hover:border-white/30 transition-colors cursor-pointer"
+              title="Supabase Database Settings"
+            >
+              <Database className="w-3.5 h-3.5 text-[#3ECF8E]" />
+              <span className="hidden md:inline">Database</span>
+            </button>
             {/* Quick Site ON / OFF Toggle Button in Header */}
             <button
               type="button"
@@ -1058,6 +1143,71 @@ export function AdminPanel({
             </div>
           </div>
         </div>
+
+        {/* Supabase Database Connection Status Banner */}
+        <div
+          className={`mb-8 border p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
+            isSupabaseConfigured()
+              ? "bg-[#0b1411]/90 border-[#3ECF8E]/30"
+              : "bg-gradient-to-r from-amber-950/30 to-[#121316] border-amber-500/40 shadow-lg"
+          }`}
+        >
+          <div className="flex items-start gap-3.5">
+            <div
+              className={`w-10 h-10 rounded-full flex items-center justify-center border shrink-0 ${
+                isSupabaseConfigured()
+                  ? "bg-[#3ECF8E]/15 border-[#3ECF8E]/40 text-[#3ECF8E]"
+                  : "bg-amber-500/15 border-amber-500/40 text-amber-400"
+              }`}
+            >
+              <Database className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+                  Database Link:
+                </h3>
+                <span
+                  className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[11px] font-mono font-bold uppercase tracking-wider border ${
+                    isSupabaseConfigured()
+                      ? "bg-[#3ECF8E]/20 border-[#3ECF8E]/40 text-[#3ECF8E]"
+                      : "bg-amber-500/20 border-amber-500/40 text-amber-300 animate-pulse"
+                  }`}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      isSupabaseConfigured()
+                        ? "bg-[#3ECF8E]"
+                        : "bg-amber-400 animate-ping"
+                    }`}
+                  />
+                  {isSupabaseConfigured()
+                    ? "SUPABASE CONNECTED (REAL-TIME SYNC ACTIVE)"
+                    : "SUPABASE NOT LINKED YET"}
+                </span>
+              </div>
+              <p className="text-xs text-[#B8B8B8] mt-1 leading-relaxed max-w-2xl">
+                {isSupabaseConfigured()
+                  ? "Every quote enquiry and review submitted on your live Vercel website syncs instantly to your Supabase PostgreSQL database."
+                  : "Link your Supabase Project URL and Anon Public Key so client quotes submitted on your live Vercel website appear here in real time on all devices."}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowSupabaseModal(true)}
+            className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 transition-all cursor-pointer shrink-0 ${
+              isSupabaseConfigured()
+                ? "border border-[#3ECF8E]/40 text-[#3ECF8E] hover:bg-[#3ECF8E]/10"
+                : "bg-[#3ECF8E] text-[#050505] hover:bg-white shadow-lg shadow-[#3ECF8E]/20"
+            }`}
+          >
+            <Database className="w-4 h-4" />
+            <span>{isSupabaseConfigured() ? "Manage Supabase" : "Link Supabase Now"}</span>
+          </button>
+        </div>
+
         {/* Metric Cards Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <div className="bg-[#121316] border border-white/10 p-5">
@@ -1469,6 +1619,122 @@ export function AdminPanel({
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Supabase Connection Setup Modal */}
+      {showSupabaseModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+          <div className="bg-[#121316] border border-white/20 w-full max-w-lg p-6 sm:p-8 shadow-2xl relative my-8">
+            <div className="flex items-center justify-between pb-4 border-b border-white/15 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-[#3ECF8E]/20 flex items-center justify-center border border-[#3ECF8E]/40 text-[#3ECF8E]">
+                  <Database className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-display text-lg font-bold text-white">
+                    Link Supabase Database
+                  </h3>
+                  <p className="text-xs text-[#B8B8B8]">
+                    Sync live client quotes &amp; reviews in real time
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSupabaseModal(false);
+                  setSupabaseTestStatus({ testing: false });
+                }}
+                className="p-1.5 text-[#B8B8B8] hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveAndTestSupabase} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium uppercase tracking-wider text-[#B8B8B8] mb-1.5 font-mono">
+                  Supabase Project URL *
+                </label>
+                <input
+                  type="url"
+                  required
+                  value={supabaseUrlInput}
+                  onChange={(e) => setSupabaseUrlInput(e.target.value)}
+                  placeholder="https://your-project.supabase.co"
+                  className="w-full px-4 py-3 bg-[#07080a] border border-white/20 text-white text-xs font-mono placeholder:text-white/30 focus:outline-none focus:border-[#3ECF8E]"
+                />
+                <p className="text-[10px] text-[#7E7E7E] mt-1 font-mono">
+                  From Supabase Dashboard &gt; Project Settings &gt; API &gt; Project URL
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium uppercase tracking-wider text-[#B8B8B8] mb-1.5 font-mono">
+                  Supabase Anon Public API Key *
+                </label>
+                <textarea
+                  rows={3}
+                  required
+                  value={supabaseKeyInput}
+                  onChange={(e) => setSupabaseKeyInput(e.target.value)}
+                  placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  className="w-full px-4 py-2.5 bg-[#07080a] border border-white/20 text-white text-xs font-mono placeholder:text-white/30 focus:outline-none focus:border-[#3ECF8E]"
+                />
+                <p className="text-[10px] text-[#7E7E7E] mt-1 font-mono">
+                  From Supabase Dashboard &gt; Project Settings &gt; API &gt; Project API keys (anon public)
+                </p>
+              </div>
+
+              {supabaseTestStatus.message && (
+                <div
+                  className={`p-3 text-xs flex items-start gap-2 border ${
+                    supabaseTestStatus.success
+                      ? "bg-emerald-950/60 border-emerald-500/50 text-emerald-200"
+                      : "bg-red-950/60 border-red-500/50 text-red-200"
+                  }`}
+                >
+                  {supabaseTestStatus.success ? (
+                    <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                  )}
+                  <span>{supabaseTestStatus.message}</span>
+                </div>
+              )}
+
+              <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                <button
+                  type="submit"
+                  disabled={supabaseTestStatus.testing}
+                  className="w-full sm:flex-1 py-3 px-5 bg-[#3ECF8E] text-[#050505] text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  {supabaseTestStatus.testing ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Testing Connection...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Test &amp; Connect Database</span>
+                    </>
+                  )}
+                </button>
+
+                {isSupabaseConfigured() && (
+                  <button
+                    type="button"
+                    onClick={handleDisconnectSupabase}
+                    className="w-full sm:w-auto py-3 px-4 border border-red-500/40 text-red-400 hover:bg-red-950/40 text-xs font-medium uppercase tracking-wider transition-colors cursor-pointer"
+                  >
+                    Disconnect
+                  </button>
+                )}
+              </div>
+            </form>
           </div>
         </div>
       )}

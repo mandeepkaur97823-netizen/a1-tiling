@@ -1,32 +1,107 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-// Read Supabase environment variables from Vite or process.env
-const supabaseUrl: string =
-  (typeof import.meta !== "undefined" &&
-    import.meta.env &&
-    import.meta.env.VITE_SUPABASE_URL) ||
-  (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
-  "";
+let cachedClient: SupabaseClient | null = null;
+let cachedKey = "";
 
-const supabaseAnonKey: string =
-  (typeof import.meta !== "undefined" &&
-    import.meta.env &&
-    import.meta.env.VITE_SUPABASE_ANON_KEY) ||
-  (typeof process !== "undefined" && process.env?.SUPABASE_ANON_KEY) ||
-  "";
+// ----------------------------------------------------------------------------
+// Supabase Configuration Loader
+// Checks Vite env, Node process.env, and localStorage
+// ----------------------------------------------------------------------------
+export function getSupabaseConfig(): { url: string; anonKey: string } {
+  let url =
+    (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_URL) ||
+    (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
+    "";
+  let anonKey =
+    (typeof import.meta !== "undefined" &&
+      import.meta.env?.VITE_SUPABASE_ANON_KEY) ||
+    (typeof process !== "undefined" && process.env?.SUPABASE_ANON_KEY) ||
+    "";
 
-export const isSupabaseConfigured = (): boolean => {
+  // Check localStorage if not in env (enables in-browser setup on Vercel)
+  if ((!url || !anonKey) && typeof window !== "undefined") {
+    try {
+      const storedUrl = localStorage.getItem("a1_supabase_url");
+      const storedKey = localStorage.getItem("a1_supabase_anon_key");
+      if (storedUrl && storedKey) {
+        url = storedUrl;
+        anonKey = storedKey;
+      }
+    } catch {}
+  }
+
+  return { url: url.trim(), anonKey: anonKey.trim() };
+}
+
+export function isSupabaseConfigured(): boolean {
+  const { url, anonKey } = getSupabaseConfig();
   return Boolean(
-    supabaseUrl &&
-      supabaseAnonKey &&
-      !supabaseUrl.includes("your-project") &&
-      !supabaseAnonKey.includes("your-anon"),
+    url &&
+      anonKey &&
+      url.startsWith("https://") &&
+      anonKey.length > 20 &&
+      !url.includes("your-project") &&
+      !anonKey.includes("your-anon"),
   );
-};
+}
 
-export const supabase: SupabaseClient | null = isSupabaseConfigured()
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+export function getSupabase(): SupabaseClient | null {
+  const { url, anonKey } = getSupabaseConfig();
+  if (!isSupabaseConfigured()) return null;
+
+  const currentKey = `${url}|${anonKey}`;
+  if (cachedClient && cachedKey === currentKey) {
+    return cachedClient;
+  }
+
+  try {
+    cachedClient = createClient(url, anonKey);
+    cachedKey = currentKey;
+    return cachedClient;
+  } catch (err) {
+    console.error("Failed to initialize Supabase client:", err);
+    return null;
+  }
+}
+
+export function saveSupabaseConfig(url: string, anonKey: string): void {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("a1_supabase_url", url.trim());
+    localStorage.setItem("a1_supabase_anon_key", anonKey.trim());
+    cachedClient = null;
+    cachedKey = "";
+  }
+}
+
+export function clearSupabaseConfig(): void {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("a1_supabase_url");
+    localStorage.removeItem("a1_supabase_anon_key");
+    cachedClient = null;
+    cachedKey = "";
+  }
+}
+
+export async function testSupabaseConnection(
+  url: string,
+  anonKey: string,
+): Promise<{ ok: boolean; error?: string; count?: number }> {
+  try {
+    const testClient = createClient(url.trim(), anonKey.trim());
+    const { count, error } = await testClient
+      .from("enquiries")
+      .select("*", { count: "exact", head: true });
+
+    if (error) {
+      return { ok: false, error: error.message };
+    }
+    return { ok: true, count: count ?? 0 };
+  } catch (err: any) {
+    return { ok: false, error: err?.message || "Connection failed" };
+  }
+}
+
+export const supabase = getSupabase();
 
 export interface SupabaseEnquiry {
   id?: string;
@@ -76,9 +151,10 @@ export async function insertEnquiryToSupabase(data: {
   status?: string;
   notes?: string;
 }): Promise<boolean> {
-  if (!supabase) return false;
+  const client = getSupabase();
+  if (!client) return false;
   try {
-    const { error } = await supabase.from("enquiries").insert([
+    const { error } = await client.from("enquiries").insert([
       {
         reference_id: data.referenceId,
         full_name: data.fullName,
@@ -107,9 +183,10 @@ export async function insertEnquiryToSupabase(data: {
 }
 
 export async function fetchEnquiriesFromSupabase(): Promise<any[] | null> {
-  if (!supabase) return null;
+  const client = getSupabase();
+  if (!client) return null;
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from("enquiries")
       .select("*")
       .order("submitted_at", { ascending: false });
@@ -146,9 +223,10 @@ export async function updateEnquiryStatusInSupabase(
   referenceId: string,
   status: string,
 ): Promise<boolean> {
-  if (!supabase) return false;
+  const client = getSupabase();
+  if (!client) return false;
   try {
-    const { error } = await supabase
+    const { error } = await client
       .from("enquiries")
       .update({ status })
       .eq("reference_id", referenceId);
@@ -162,9 +240,10 @@ export async function updateEnquiryNotesInSupabase(
   referenceId: string,
   notes: string,
 ): Promise<boolean> {
-  if (!supabase) return false;
+  const client = getSupabase();
+  if (!client) return false;
   try {
-    const { error } = await supabase
+    const { error } = await client
       .from("enquiries")
       .update({ notes })
       .eq("reference_id", referenceId);
@@ -177,9 +256,10 @@ export async function updateEnquiryNotesInSupabase(
 export async function deleteEnquiryFromSupabase(
   referenceId: string,
 ): Promise<boolean> {
-  if (!supabase) return false;
+  const client = getSupabase();
+  if (!client) return false;
   try {
-    const { error } = await supabase
+    const { error } = await client
       .from("enquiries")
       .delete()
       .eq("reference_id", referenceId);
@@ -194,9 +274,10 @@ export async function deleteEnquiryFromSupabase(
 // ----------------------------------------------------------------------
 
 export async function fetchReviewsFromSupabase(): Promise<any[] | null> {
-  if (!supabase) return null;
+  const client = getSupabase();
+  if (!client) return null;
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from("reviews")
       .select("*")
       .order("created_at", { ascending: false });
@@ -235,9 +316,10 @@ export async function insertReviewToSupabase(data: {
   content: string;
   date: string;
 }): Promise<boolean> {
-  if (!supabase) return false;
+  const client = getSupabase();
+  if (!client) return false;
   try {
-    const { error } = await supabase.from("reviews").insert([
+    const { error } = await client.from("reviews").insert([
       {
         id: data.id || `rev-${Date.now()}`,
         author: data.author,
@@ -270,9 +352,10 @@ export async function fetchSiteSettingsFromSupabase(): Promise<{
   isSiteLive: boolean;
   maintenanceMessage: string;
 } | null> {
-  if (!supabase) return null;
+  const client = getSupabase();
+  if (!client) return null;
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from("site_settings")
       .select("*")
       .eq("id", "global")
@@ -292,9 +375,10 @@ export async function updateSiteSettingsInSupabase(settings: {
   isSiteLive: boolean;
   maintenanceMessage: string;
 }): Promise<boolean> {
-  if (!supabase) return false;
+  const client = getSupabase();
+  if (!client) return false;
   try {
-    const { error } = await supabase.from("site_settings").upsert({
+    const { error } = await client.from("site_settings").upsert({
       id: "global",
       is_site_live: settings.isSiteLive,
       maintenance_message: settings.maintenanceMessage,
