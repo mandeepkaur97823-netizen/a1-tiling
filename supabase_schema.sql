@@ -124,3 +124,12 @@ CREATE POLICY "Public can update site settings"
 ON public.site_settings 
 FOR UPDATE 
 USING (true);
+
+-- ====================================================================
+-- GRANT ROLES PRIVILEGES (Required for anon public key)
+-- ====================================================================
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.enquiries TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.reviews TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.site_settings TO anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;

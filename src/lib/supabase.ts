@@ -5,8 +5,12 @@ let cachedKey = "";
 
 // ----------------------------------------------------------------------------
 // Supabase Configuration Loader
-// Checks Vite env, Node process.env, and localStorage
+// Default linked credentials with Vite env & localStorage overrides
 // ----------------------------------------------------------------------------
+const DEFAULT_SUPABASE_URL = "https://nlgasgidtxzsejzpsgrx.supabase.co";
+const DEFAULT_SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sZ2FzZ2lkdHh6c2VqenBzZ3J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxODY0NDksImV4cCI6MjExMDc2MjQ0OX0.t2dC8gwVDfbaUE_yqU9UN04IhfCHl9yF0S0K9RiXpBY";
+
 export function getSupabaseConfig(): { url: string; anonKey: string } {
   let url =
     (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_URL) ||
@@ -29,6 +33,10 @@ export function getSupabaseConfig(): { url: string; anonKey: string } {
       }
     } catch {}
   }
+
+  // Fallback to linked production credentials
+  if (!url) url = DEFAULT_SUPABASE_URL;
+  if (!anonKey) anonKey = DEFAULT_SUPABASE_ANON_KEY;
 
   return { url: url.trim(), anonKey: anonKey.trim() };
 }
